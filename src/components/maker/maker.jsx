@@ -5,9 +5,9 @@ import Footer from '../footer/footer';
 import Header from '../header/header';
 import styles from '../maker/maker.module.css';
 import Preview from '../preview/preview';
-const Maker = ({authService}) => {
-    const [cards, setCards] = useState([
-        {
+const Maker = ({ FileInput ,authService}) => {
+    const [cards, setCards] = useState({
+        '1' :{
             id: '1',
             name : 'marsoon',
             company : 'Google',
@@ -17,21 +17,22 @@ const Maker = ({authService}) => {
             message : 'go for it',
             fileName : 'marsoon',
             fileURL : null,
-
         },
-        {
-            id: '2',
-            name : 'marsoon',
-            company : 'Google',
-            theme : 'light',
-            title : 'S/W Engineer',
-            email : 'asroq98@gmail.com',
-            message : 'go for it',
-            fileName : 'marsoon',
-            fileURL : 'marsoon.png',
 
+        '2' : {
+            
+        id: '2',
+        name : 'marsoon',
+        company : 'Google',
+        theme : 'light',
+        title : 'S/W Engineer',
+        email : 'asroq98@gmail.com',
+        message : 'go for it',
+        fileName : 'marsoon',
+        fileURL : 'marsoon.png',
         },
-        {
+
+        '3' :{
             id: '3',
             name : 'marsoon',
             company : 'Google',
@@ -41,9 +42,8 @@ const Maker = ({authService}) => {
             message : 'go for it',
             fileName : 'marsoon',
             fileURL : null,
-
-        },
-    ]);
+        }
+    });
 
     const history = useHistory();
 
@@ -51,6 +51,21 @@ const Maker = ({authService}) => {
         authService.logout();
     };
 
+    const createOrupdateCard = card =>{
+       setCards(cards =>{
+           const updated = {... cards};
+           updated[card.id] = card;
+           return updated;
+       })
+    };
+
+    const deleteCard = card =>{
+        setCards(cards =>{
+            const updated = {... cards};
+            delete updated[card.id];
+            return updated;
+        })
+    }
     useEffect(() =>{
         authService.onAuthChange(user =>{
         if(!user){
@@ -59,15 +74,11 @@ const Maker = ({authService}) => {
         });
     });
     
-    const addCard = card =>{
-       const updated = [...cards , card];
-       setCards(updated);
-    }
     return (
         <section className={styles.maker}>
             <Header onLogout={onLogout}/>
             <div className={styles.container}>
-              <Editor cards={cards} addCard={addCard} />
+              <Editor FileInput={FileInput} cards={cards} addCard={createOrupdateCard} updateCard={createOrupdateCard} deleteCard={deleteCard}/>
               <Preview  cards={cards}/>  
             </div>
             <Footer />
